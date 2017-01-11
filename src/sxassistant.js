@@ -45,9 +45,7 @@ var SxAssistant = (function () {
             var srcValue = document.getElementById('id_name').value,
                 destValue = '';
             if (srcValue != undefined && srcValue.length > 0) {
-                destValue = srcValue.replace(/([A-Z])/g, '_$1')
-                    .replace(/^_/g, '')
-                    .toUpperCase();
+                destValue = srcValue.replace(/([a-z](?=[A-Z]))/g, '$1_').toUpperCase();
             }
             if (location.href.endsWith("@SXAttr")) {
                 destValue = 'A_' + destValue;
