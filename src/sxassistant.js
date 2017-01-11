@@ -6,18 +6,22 @@ var SxAssistant = (function () {
         module.createButtonFillCodeName();
     };
     module.createButtonFillCodeName = function () {
-        var elementSxAssistant = document.createElement('button');
-        elementSxAssistant.id = 'sxassistantButtonFillCodeName';
-        elementSxAssistant.style.display = 'none';
-        elementSxAssistant.style.height = '17px';
-        elementSxAssistant.style.lineHeight = '10px';
-        elementSxAssistant.innerText = 'Перевод на латиницу';
-        elementSxAssistant.addEventListener('click', function () {
+        var idSourceField = 'id_title';
+        if (location.href.endsWith("@SXClass")) {
+            idSourceField = 'id_description';
+        }
+        var button = document.createElement('button');
+        button.id = 'sxassistantButtonFillCodeName';
+        button.style.display = 'none';
+        button.style.height = '17px';
+        button.style.lineHeight = '10px';
+        button.innerText = 'Заполнить транслитом кодовое имя';
+        button.addEventListener('click', function () {
             event.preventDefault();
-            document.getElementById('id_name').value = module.toLatin(document.getElementById('id_description').value);
+            document.getElementById('id_name').value = module.toCamelCase(module.toTransliterate(document.getElementById(idSourceField).value), idSourceField === 'id_description');
         }, false);
-        var parentName = document.getElementById('id_description').parentElement;
-        parentName.appendChild(elementSxAssistant);
+        var parentName = document.getElementById(idSourceField).parentElement;
+        parentName.appendChild(button);
         parentName.addEventListener('mouseover', function () {
             document.getElementById('sxassistantButtonFillCodeName').style.display = 'inline';
         });
@@ -26,17 +30,17 @@ var SxAssistant = (function () {
         });
     };
     module.createButtonFillTableField = function () {
-        var elementSxAssistant = document.createElement('button');
-        elementSxAssistant.id = 'sxassistantButtonFillTableField';
-        elementSxAssistant.style.display = 'none';
-        elementSxAssistant.style.height = '17px';
-        elementSxAssistant.style.lineHeight = '10px';
+        var button = document.createElement('button');
+        button.id = 'sxassistantButtonFillTableField';
+        button.style.display = 'none';
+        button.style.height = '17px';
+        button.style.lineHeight = '10px';
         if (location.href.endsWith("@SXClass")) {
-            elementSxAssistant.innerText = 'Заполнить наименование таблицы';
+            button.innerText = 'Заполнить наименование таблицы';
         } else {
-            elementSxAssistant.innerText = 'Заполнить поле таблицы';
+            button.innerText = 'Заполнить поле таблицы';
         }
-        elementSxAssistant.addEventListener('click', function () {
+        button.addEventListener('click', function () {
             event.preventDefault();
             var srcValue = document.getElementById('id_name').value,
                 destValue = '';
@@ -51,7 +55,7 @@ var SxAssistant = (function () {
             document.getElementById('id_map').value = destValue;
         }, false);
         var parentName = document.getElementById('id_name').parentElement;
-        parentName.appendChild(elementSxAssistant);
+        parentName.appendChild(button);
         parentName.addEventListener('mouseover', function () {
             document.getElementById('sxassistantButtonFillTableField').style.display = 'inline';
         });
@@ -60,24 +64,34 @@ var SxAssistant = (function () {
         });
     };
     module.createButtonToLatin = function () {
-        var elementSxAssistant = document.createElement('button');
-        elementSxAssistant.id = 'sxassistantButtonToLatin';
-        elementSxAssistant.style.display = 'none';
-        //elementSxAssistant.style.position = 'absolute';
-        elementSxAssistant.style.height = '17px';
-        elementSxAssistant.style.lineHeight = '10px';
-        elementSxAssistant.innerText = 'Перевод на латиницу';
-        elementSxAssistant.addEventListener('click', function () {
+        var button = document.createElement('button');
+        button.id = 'sxassistantButtonToLatin';
+        button.style.display = 'none';
+        button.style.height = '17px';
+        button.style.lineHeight = '10px';
+        button.innerText = 'Перевод на латиницу';
+        button.addEventListener('click', function () {
             event.preventDefault();
             document.getElementById('id_name').value = module.toLatin(document.getElementById('id_name').value);
         }, false);
         var parentName = document.getElementById('id_name').parentElement;
-        parentName.appendChild(elementSxAssistant);
+        parentName.appendChild(button);
         parentName.addEventListener('mouseover', function () {
             document.getElementById('sxassistantButtonToLatin').style.display = 'inline';
         });
         parentName.addEventListener('mouseout', function () {
             document.getElementById('sxassistantButtonToLatin').style.display = 'none';
+        });
+    };
+    module.toCamelCase = function (text, firstToUpper) {
+        return text.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2, offset) {
+            if (firstToUpper && offset == 0) {
+                return p1.toUpperCase();
+            }
+            if (p2) {
+                return p2.toUpperCase();
+            }
+            return p1.toLowerCase();
         });
     };
     module.toTransliterate = function (text) {
