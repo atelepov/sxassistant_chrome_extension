@@ -1,21 +1,28 @@
 {
   "manifest_version": 2,
-
   "name": "SxAssistant",
   "description": "This extension helpful for working in sitex console",
   "version": "0.0.1",
-
   "browser_action": {
     "default_icon": "icon.png"
   },
   "content_scripts": [
     {
-      "matches": ["*://*/*@SXClass","*://*/*@SXAttr"],
-      "js": ["sxassistant.js"]
+      "matches": [
+        "*://*/*@SXClass",
+        "*://*/*&cls=SXClass&*",
+        "*://*/*@SXAttr",
+        "*://*/*&cls=SXAttr&*"
+      ],
+      "js": [
+        "sxassistant.js"
+      ]
     }
   ],
   "permissions": [
     "*://*/*@SXClass",
-    "*://*/*@SXAttr"
+    "*://*/*&cls=SXClass&*",
+    "*://*/*@SXAttr",
+    "*://*/*&cls=SXAttr&*"
   ]
 }

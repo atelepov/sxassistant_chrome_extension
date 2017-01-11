@@ -7,7 +7,7 @@ var SxAssistant = (function () {
     };
     module.createButtonFillCodeName = function () {
         var idSourceField = 'id_title';
-        if (location.href.endsWith("@SXClass")) {
+        if (module.isClass()) {
             idSourceField = 'id_description';
         }
         var button = document.createElement('button');
@@ -18,7 +18,10 @@ var SxAssistant = (function () {
         button.innerText = 'Заполнить транслитом';
         button.addEventListener('click', function () {
             event.preventDefault();
-            document.getElementById('id_name').value = module.toCamelCase(module.toTransliterate(document.getElementById(idSourceField).value), idSourceField === 'id_description');
+            document.getElementById('id_name').value = module.toCamelCase(
+                module.toTransliterate(document.getElementById(idSourceField).value),
+                idSourceField === 'id_description'
+            );
         }, false);
         var parentName = document.getElementById('id_name').parentElement;
         parentName.appendChild(button);
@@ -39,11 +42,8 @@ var SxAssistant = (function () {
         button.addEventListener('click', function () {
             event.preventDefault();
             var srcValue = document.getElementById('id_name').value,
-                destValue = '';
-            if (srcValue != undefined && srcValue.length > 0) {
                 destValue = srcValue.replace(/([a-z](?=[A-Z]))/g, '$1_').toUpperCase();
-            }
-            if (location.href.endsWith("@SXAttr")) {
+            if (!module.isClass()) {
                 destValue = 'A_' + destValue;
             }
             document.getElementById('id_map').value = destValue;
@@ -78,7 +78,7 @@ var SxAssistant = (function () {
         });
     };
     module.toCamelCase = function (text, firstToUpper) {
-        return text.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2, offset) {
+        return text.replace(/^([A-Z])|\s(\w)/g, function (match, p1, p2, offset) {
             if (firstToUpper && offset == 0) {
                 return p1.toUpperCase();
             }
@@ -87,6 +87,9 @@ var SxAssistant = (function () {
             }
             return p1.toLowerCase();
         });
+    };
+    module.isClass = function () {
+        return location.href.endsWith("@SXClass") || location.href.indexOf("&cls=SXClass&") != -1;
     };
     module.toTransliterate = function (text) {
         return text
