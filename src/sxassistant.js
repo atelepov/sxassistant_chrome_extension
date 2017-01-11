@@ -15,12 +15,12 @@ var SxAssistant = (function () {
         button.style.display = 'none';
         button.style.height = '17px';
         button.style.lineHeight = '10px';
-        button.innerText = 'Заполнить транслитом кодовое имя';
+        button.innerText = 'Заполнить транслитом';
         button.addEventListener('click', function () {
             event.preventDefault();
             document.getElementById('id_name').value = module.toCamelCase(module.toTransliterate(document.getElementById(idSourceField).value), idSourceField === 'id_description');
         }, false);
-        var parentName = document.getElementById(idSourceField).parentElement;
+        var parentName = document.getElementById('id_name').parentElement;
         parentName.appendChild(button);
         parentName.addEventListener('mouseover', function () {
             document.getElementById('sxassistantButtonFillCodeName').style.display = 'inline';
@@ -35,11 +35,7 @@ var SxAssistant = (function () {
         button.style.display = 'none';
         button.style.height = '17px';
         button.style.lineHeight = '10px';
-        if (location.href.endsWith("@SXClass")) {
-            button.innerText = 'Заполнить наименование таблицы';
-        } else {
-            button.innerText = 'Заполнить поле таблицы';
-        }
+        button.innerText = 'Заполнить кодовым именем';
         button.addEventListener('click', function () {
             event.preventDefault();
             var srcValue = document.getElementById('id_name').value,
@@ -52,7 +48,7 @@ var SxAssistant = (function () {
             }
             document.getElementById('id_map').value = destValue;
         }, false);
-        var parentName = document.getElementById('id_name').parentElement;
+        var parentName = document.getElementById('id_map').parentElement;
         parentName.appendChild(button);
         parentName.addEventListener('mouseover', function () {
             document.getElementById('sxassistantButtonFillTableField').style.display = 'inline';
