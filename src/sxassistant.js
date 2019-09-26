@@ -57,6 +57,7 @@ var SxAssistant = (function () {
             document.getElementById('sxassistantButtonFillTableField').style.display = 'none';
         });
     };
+
     module.createButtonToLatin = function () {
         var button = document.createElement('button');
         button.id = 'sxassistantButtonToLatin';
